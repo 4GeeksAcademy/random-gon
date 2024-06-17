@@ -5,11 +5,11 @@ const cleanStack = require("./_utils/clean-stack.js");
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 const WebpackErrorReporting = require('bc-webpack-error-reporting-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const port = 3000;
 let publicUrl = `http://localhost:${port}`;
-if(process.env.GITPOD_WORKSPACE_URL){
+if (process.env.GITPOD_WORKSPACE_URL) {
   const [schema, host] = process.env.GITPOD_WORKSPACE_URL.split('://');
   publicUrl = `${port}-${host}`;
 }
@@ -27,6 +27,11 @@ module.exports = {
     historyApiFallback: true,
     public: publicUrl,
     stats: 'errors-warnings',
+    contentBase: path.join(__dirname, 'src'), // Asegúrate de que está configurado correctamente
+    watchContentBase: true,
+    compress: true,
+    port: port,
+    open: true // Esta opción abrirá automáticamente el navegador
   },
   module: {
     rules: [
@@ -67,15 +72,15 @@ module.exports = {
       framework: "vanillajs"
     }),
     new FriendlyErrorsWebpackPlugin({
-        // additionalFormatters: [cleanStack]
+      // additionalFormatters: [cleanStack]
     }),
     new ErrorOverlayPlugin(),
     new HtmlWebpackPlugin({
-        filename: "index.html",
-        template: "src/index.html"
+      filename: "index.html",
+      template: "src/index.html"
     }),
     new PrettierPlugin({
-        failSilently: true
+      failSilently: true
     }),
   ]
 };
